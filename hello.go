@@ -33,6 +33,8 @@ func main() {
 	deferTest2()
 	pointerTest()
 	structTest()
+	arrayTest()
+	sliceTest()
 }
 
 // 函数结构
@@ -251,4 +253,84 @@ func structTest() {
 	fmt.Println((*p).X)
 	p.X = 4
 	fmt.Println(p.X)
+
+	var (
+		v1 = Coordinate{1, 2}
+		// Y隐式0
+		v2 = Coordinate{X: 1}
+		// X,Y隐式0
+		v3 = Coordinate{}
+		p1 = &Coordinate{1, 2}
+	)
+	fmt.Println(v1, v2, v3, p1)
+}
+
+func arrayTest() {
+	// 数组数量固定
+	var a [2]string
+	a[0] = "hello"
+	a[1] = "world"
+	fmt.Println(a[0], a[1])
+	fmt.Println(a)
+	numArray := [6]int{1, 2, 3, 4, 5, 6}
+	fmt.Println(numArray)
+}
+
+func sliceTest() {
+	// 切片
+	// 数组大小固定，切片动态可变，更常用
+	// 切片通过两个下标来界定，即一个上界和一个下界，二者以冒号分隔：
+	// a[low,high]
+	// 包含low,不包含high
+	arrA := [3]int{1, 2, 3}
+	sliceA := arrA[0:2]
+	fmt.Println(sliceA)
+	// 切片并不存储任何数据，它只是描述了底层数组中的一段。
+	// 更改切片的元素会修改其底层数组中对应的元素。
+	// 与它共享底层数组的切片都会观测到这些修改。
+	names := [4]string{"john", "lihua", "meimei", "xiaoming"}
+	fmt.Println(names)
+	namesa := names[0:2]
+	namesb := names[1:4]
+	fmt.Println(namesa, namesb)
+	names[1] = "aaa"
+	fmt.Println(names, namesa, namesb)
+	// 数组
+	arraya1 := [2]int{1, 2}
+	// 创建数组并构建了一个引用它的切片
+	slicea1 := []int{1, 2}
+	fmt.Println(arraya1, slicea1)
+	// 结构体切片
+	sliceStruct := []struct {
+		name string
+		age  int
+	}{
+		{"xiaohong", 18},
+		{"lihua", 19},
+		{"hanmeimei", 20},
+	}
+	fmt.Println(sliceStruct)
+	// 切片默认行为
+	// 在进行切片时，你可以利用它的默认行为来忽略上下界。
+	// 切片下界的默认值为 0，上界则是该切片的长度。
+	arrayb1 := [5]int{1, 2, 3, 4, 5}
+	sliceb1 := arrayb1[0:5]
+	sliceb2 := arrayb1[:5]
+	sliceb3 := arrayb1[0:]
+	sliceb4 := arrayb1[:]
+	fmt.Println(sliceb1, sliceb2, sliceb3, sliceb4)
+	// 切片的长度：包含的元素个数
+	// 切片的容量：底层数组的元素个数
+	arrayc1 := [5]int{1, 2, 3, 4, 5}
+	slicec1 := arrayc1[:0]
+	fmt.Printf("len: %d cap: %d\n", len(slicec1), cap(slicec1))
+	slicec1 = arrayc1[2:]
+	fmt.Printf("len: %d cap: %d\n", len(slicec1), cap(slicec1))
+	// 切片的零值是nil
+	var sliced1 []int
+	fmt.Printf("len: %d cap: %d\n", len(sliced1), cap(sliced1))
+	fmt.Println(sliced1)
+	if sliced1 == nil {
+		fmt.Println("nil!")
+	}
 }
